@@ -96,6 +96,30 @@ func ExampleDecoder_Decode() {
 	// Output: 12345
 }
 
+func TestDecoder_SourceLongerThanDest(t *testing.T) {
+	dec := NewDecoder(Standard)
+
+	var src, dst []byte
+	var n int
+	var err error
+
+	src = []byte{0x21, 0x43, 0x55}
+	dst = make([]byte, DecodedLen(len(src)-1))
+	n, err = dec.Decode(dst, src)
+	if err != nil {
+		t.Error(err)
+	}
+	fmt.Println(string(dst[:n]))
+
+	src = []byte{0x21, 0x43, 0xff}
+	dst = make([]byte, DecodedLen(len(src)-1))
+	n, err = dec.Decode(dst, src)
+	if err != nil {
+		t.Error(err)
+	}
+	fmt.Println(string(dst[:n]))
+}
+
 func TestDecodeOpt(t *testing.T) {
 	assert := newAssert(t, true)
 	enc := NewDecoder(enc)

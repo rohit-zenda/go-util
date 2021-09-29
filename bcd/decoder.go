@@ -106,10 +106,10 @@ func (dec *Decoder) Decode(dst, src []byte) (n int, err error) {
 	for _, c := range src[:len(src)-1] {
 		wid, end, err := dec.unpack(dst[n:], c)
 		switch {
-		case err != nil: // invalid input
-			return n, err
 		case wid == 0: // no place in dst
 			return n, nil
+		case err != nil: // invalid input
+			return n, err
 		case end && !dec.IgnoreFiller: // unexpected filler
 			return n, ErrBadBCD
 		}
@@ -119,10 +119,10 @@ func (dec *Decoder) Decode(dst, src []byte) (n int, err error) {
 	c := src[len(src)-1]
 	wid, _, err := dec.unpack(dst[n:], c)
 	switch {
-	case err != nil: // invalid input
-		return n, err
 	case wid == 0: // no place in dst
 		return n, nil
+	case err != nil: // invalid input
+		return n, err
 	}
 	n += wid
 	return n, nil
